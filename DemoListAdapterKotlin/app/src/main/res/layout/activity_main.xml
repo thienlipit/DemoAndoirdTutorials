@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.demolistadapterkotlin.viewmodels.UserViewModel" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            tools:context=".MainActivity">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Demo List adapter and binding data" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                UserAdapter="@{viewModel.list.listUsers}"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_view"
+                android:layout_below="@+id/tv_title"
+                android:divider="@null"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_add"
+                android:layout_below="@id/recycler_view"
+                android:text="ADD"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_save"
+                android:layout_toRightOf="@+id/btn_add"
+                android:layout_below="@id/recycler_view"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="20dp"
+                android:text="SAVE"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</layout>
