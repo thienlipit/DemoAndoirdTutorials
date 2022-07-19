@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MultiLanguageKotlin</string>
+    <string name="content">This is a multi-language application</string>
+    <string name="news">Google is adding Kotlin as an official programming language for Android development</string>
+</resources>
