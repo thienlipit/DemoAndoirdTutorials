@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CheckInternet</string>
+    <string name="internet_check">internet_check</string>
+    <string name="network_error">network_error</string>
+</resources>
