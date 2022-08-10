@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/red"
+        android:title="Red"
+        android:icon="@drawable/ic_camera"
+        android:iconTint="#F44336"
+        android:iconTintMode="src_in"
+        />
+    <item
+        android:id="@+id/green"
+        android:title="Green"
+        android:icon="@drawable/ic_donut_large"
+        android:iconTint="#4CAF50"
+        android:iconTintMode="src_in"
+        />
+    <item
+        android:id="@+id/yellow"
+        android:title="Yellow"
+        android:icon="@drawable/ic_dock"
+        android:iconTint="#FFEB3B"
+        android:iconTintMode="src_in"
+        />
+    <item
+        android:id="@+id/gray"
+        android:title="Gray"
+        android:icon="@drawable/ic_add_circle"
+        android:iconTint="#707070"
+        android:iconTintMode="src_in"
+        />
+</menu>
