@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BlurDialog</string>
+    <string name="vw_dialog_delete">delete</string>
+</resources>
