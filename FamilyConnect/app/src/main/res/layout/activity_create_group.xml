@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.group.CreateGroup">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            android:textColor="#6EABB3"
+            android:text="Register New Group" />
+
+        <EditText
+            android:id="@+id/edt_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:drawableStart="@drawable/ic_username"
+            android:hint="Group name"
+            android:drawablePadding="10dp"
+            android:background="@drawable/login_edit_background"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/edt_group_id"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:drawableStart="@drawable/ic_email"
+            android:hint="Group ID"
+            android:drawablePadding="10dp"
+            android:background="@drawable/login_edit_background"
+            android:padding="10dp" />
+
+<!--        <EditText-->
+<!--            android:id="@+id/edt_user_create"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="55dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:drawableStart="@drawable/ic_password"-->
+<!--            android:hint="User name"-->
+<!--            android:inputType="textPassword"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:background="@drawable/login_edit_background"-->
+<!--            android:padding="10dp" />-->
+
+
+        <Button
+            android:id="@+id/btn_create_group"
+            android:layout_width="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/register"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="30dp"
+            android:textAllCaps="false"
+            android:textSize="21sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

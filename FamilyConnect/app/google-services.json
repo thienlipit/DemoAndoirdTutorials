@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491802467186",
+    "project_id": "family-connect-5499c",
+    "storage_bucket": "family-connect-5499c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491802467186:android:450853aede5406b7379beb",
+        "android_client_info": {
+          "package_name": "com.example.familyconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491802467186-3ovsimlhhekpsushprok3simk1me88sk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNvGPg--3ODKjy4mtZhhDQ_MqAAHawj_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491802467186-3ovsimlhhekpsushprok3simk1me88sk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

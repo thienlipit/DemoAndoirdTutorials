@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">FamilyConnect</string>
+    <string name="register_new_account">Register New Account</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm password</string>
+    <string name="email">Email</string>
+    <string name="username">User name</string>
+    <string name="login">Log in</string>
+    <string name="signup">Sign up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="create_account">Create Account</string>
+    <string name="tab1">GROUPS</string>
+    <string name="tab2">CHATS</string>
+    <string name="tab3">SETTING</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="APP_ID">de156f8be5994b66a67065361d248e11</string>
+    <string name="CHANNEL">FML1</string>
+    <string name="TOKEN">006de156f8be5994b66a67065361d248e11IACisaaTU8W9Mv6xMfgk8isB5S412X94PP2knGRMnABhO13Ga+oAAAAAEAAjgBf2YJVaYgEAAQBglVpi</string>
+
+</resources>
