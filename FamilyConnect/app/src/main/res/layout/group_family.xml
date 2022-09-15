@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    card_view:cardBackgroundColor="#6EABB3"
+    card_view:cardCornerRadius="8dp"
+    card_view:contentPadding="10dp"
+    android:foreground="?selectableItemBackground">
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:paddingLeft="5dp"
+            android:paddingEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_group_family"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tran's Family"
+                android:textSize="30sp" />
+
+            <Button
+                android:background="@drawable/btn_join_background"
+                android:id="@+id/btn_group_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Join" />
+
+        </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

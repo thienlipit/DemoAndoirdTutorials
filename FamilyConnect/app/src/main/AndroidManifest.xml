@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.familyconnect">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_send_ok"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_send_ok"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FamilyConnect">
+        <activity
+            android:name=".views.VideoCall"
+            android:exported="false" />
+        <activity
+            android:name="com.example.familyconnect.views.chatgroup.ChatGroupActivity"
+            android:exported="false"
+            android:parentActivityName=".views.main.MainActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.login.ChangePasswordActivity"
+            android:exported="false"
+            android:parentActivityName=".views.main.MainActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.group.MemberListActivity"
+            android:exported="false"
+            android:parentActivityName=".views.main.MainActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.group.CreateGroup"
+            android:exported="false"
+            android:parentActivityName=".views.main.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.example.familyconnect.views.login.ChangeInfoActivity"
+            android:exported="false"
+            android:parentActivityName=".views.main.MainActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.chatall.ChatActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.familyconnect.views.chatall.ChatActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.login.SignUp"
+            android:exported="false"
+            android:parentActivityName="com.example.familyconnect.views.login.LogIn"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name=".views.main.MainActivity" />
+        <activity
+            android:name="com.example.familyconnect.views.login.LogIn"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
