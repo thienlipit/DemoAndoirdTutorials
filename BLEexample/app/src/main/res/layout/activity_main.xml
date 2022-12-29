@@ -22,6 +22,14 @@
         android:layout_centerInParent="true"
         android:text="Turn off BT" />
 
+    <Button
+        android:id="@+id/sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/BtBtn1"
+        android:layout_centerInParent="true"
+        android:text="Test sensor" />
+
     <!--Displays the state of Bluetooth on button click-->
     <TextView
         android:id="@+id/BtTv"

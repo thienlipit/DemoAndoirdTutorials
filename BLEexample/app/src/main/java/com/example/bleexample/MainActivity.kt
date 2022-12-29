@@ -5,7 +5,11 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -20,6 +24,10 @@ import androidx.lifecycle.Observer
 import org.altbeacon.beacon.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var sensorManager: SensorManager
+    private var sensor: Sensor? = null
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -46,14 +54,19 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
+        Log.d("Sensor1", sensor!!.name.toString())
 
-        val beaconManager =  BeaconManager.getInstanceForApplication(this)
-        val region = Region("all-beacons-region", null, null, null)
-        // Set up a Live Data observer so this Activity can get monitoring callbacks
-        // observer will be called each time the monitored regionState changes (inside vs. outside region)
-        beaconManager.getRegionViewModel(region).regionState.observe(this, monitoringObserver)
-        beaconManager.startMonitoring(region)
+        Log.d("Sensor", sensor.toString())
+
+//        val beaconManager =  BeaconManager.getInstanceForApplication(this)
+//        val region = Region("all-beacons-region", null, null, null)
+//        // Set up a Live Data observer so this Activity can get monitoring callbacks
+//        // observer will be called each time the monitored regionState changes (inside vs. outside region)
+//        beaconManager.getRegionViewModel(region).regionState.observe(this, monitoringObserver)
+//        beaconManager.startMonitoring(region)
 
         // Before you perform the actual permission request, check whether your app
         // already has the permissions, and whether your app needs to show a permission
@@ -68,7 +81,13 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         val btnBt = findViewById<Button>(R.id.BtBtn)
         val btnBtOff = findViewById<Button>(R.id.BtBtn1)
+        val btnSensor = findViewById<Button>(R.id.sensor)
         val tvBt = findViewById<TextView>(R.id.BtTv)
+
+        btnSensor.setOnClickListener {
+            val intent = Intent(this, SensorActivity::class.java)
+            startActivity(intent)
+        }
 
         // Declaring Bluetooth adapter
         // On button Click
@@ -109,7 +128,7 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             bluetoothAdapter.disable()
             tvBt.text = "Bluetooth is OFF now"
         }
-        scanLeDevice()
+//        scanLeDevice()
     }
 
 
