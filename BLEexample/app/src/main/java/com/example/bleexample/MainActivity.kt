@@ -109,7 +109,7 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             bluetoothAdapter.disable()
             tvBt.text = "Bluetooth is OFF now"
         }
-//        scanLeDevice()
+        scanLeDevice()
     }
 
 
@@ -166,6 +166,7 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             Log.d("result", result.device.toString())
+            Log.d("result", result.rssi.toString())
 //            leDeviceListAdapter.addDevice(result.device)
 //            leDeviceListAdapter.notifyDataSetChanged()
         }
