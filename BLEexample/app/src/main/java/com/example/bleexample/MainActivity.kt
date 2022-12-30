@@ -82,7 +82,13 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val btnBt = findViewById<Button>(R.id.BtBtn)
         val btnBtOff = findViewById<Button>(R.id.BtBtn1)
         val btnSensor = findViewById<Button>(R.id.sensor)
+        val btnLocation = findViewById<Button>(R.id.btnLocation)
         val tvBt = findViewById<TextView>(R.id.BtTv)
+
+        btnLocation.setOnClickListener {
+            val intent = Intent(this, MyNavigationService::class.java)
+            startActivity(intent)
+        }
 
         btnSensor.setOnClickListener {
             val intent = Intent(this, SensorActivity::class.java)
