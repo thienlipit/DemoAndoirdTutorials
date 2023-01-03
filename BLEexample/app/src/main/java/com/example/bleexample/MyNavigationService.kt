@@ -1,6 +1,7 @@
 package com.example.bleexample
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +11,20 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationServices
+import android.provider.Settings.Secure;
+import android.util.Log
+import java.security.AccessController.getContext
 
 class MyNavigationService : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_navigation_service)
 
+        val IdDevices = Secure.getString(applicationContext.getContentResolver(), Secure.ANDROID_ID);
+
+        Log.d("ID", IdDevices)
         val tvLocation = findViewById<TextView>(R.id.txtLocation)
         val tvLocation1 = findViewById<TextView>(R.id.txt11)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
