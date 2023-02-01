@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -22,6 +21,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import org.altbeacon.beacon.*
+import java.io.UnsupportedEncodingException
+import java.util.*
+import kotlin.math.pow
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var sensorManager: SensorManager
@@ -46,7 +49,9 @@ class MainActivity : AppCompatActivity() {
         }
         }
     }
-private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+
 
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.N)
@@ -54,12 +59,8 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
-
-        Log.d("Sensor1", sensor!!.name.toString())
-
-        Log.d("Sensor", sensor.toString())
+      /*  sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)*/
 
 //        val beaconManager =  BeaconManager.getInstanceForApplication(this)
 //        val region = Region("all-beacons-region", null, null, null)
@@ -77,9 +78,10 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_CONNECT,
-            Manifest.permission.BLUETOOTH_SCAN,))
+            Manifest.permission.BLUETOOTH_SCAN,
+        ))
 
-        val btnBt = findViewById<Button>(R.id.BtBtn)
+        val btnBtOn = findViewById<Button>(R.id.BtBtn)
         val btnBtOff = findViewById<Button>(R.id.BtBtn1)
         val btnSensor = findViewById<Button>(R.id.sensor)
         val btnLocation = findViewById<Button>(R.id.btnLocation)
@@ -103,7 +105,7 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             tvBt.text = "Bluetooth is off"
         }
 
-        btnBt.setOnClickListener {
+        btnBtOn.setOnClickListener {
 
             // Enable or disable the Bluetooth and display
             // the state in Text View
@@ -134,7 +136,29 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             bluetoothAdapter.disable()
             tvBt.text = "Bluetooth is OFF now"
         }
-//        scanLeDevice()
+        scanLeDevice()
+
+        val beaconManager =  BeaconManager.getInstanceForApplication(this)
+        beaconManager.beaconParsers.clear()
+
+        // The example shows how to find iBeacon.
+        beaconManager.beaconParsers.add(
+            BeaconParser().
+            setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+        val region = Region("all-beacons-region", null, null, null)
+        // Set up a Live Data observer so this Activity can get ranging callbacks
+        // observer will be called each time the monitored regionState changes (inside vs. outside region)
+        beaconManager.getRegionViewModel(region).rangedBeacons.observe(this, rangingObserver)
+        beaconManager.startRangingBeacons(region)
+
+    }
+
+    val rangingObserver = Observer<Collection<Beacon>> { beacons ->
+        Log.d(TAG, "Ranged: ${beacons.count()} beacons")
+        for (beacon: Beacon in beacons) {
+            Log.d(TAG, "RSSI: ${beacon.rssi}")
+            Log.d(TAG, "$beacon about ${beacon.distance} meters away")
+        }
     }
 
 
@@ -146,8 +170,6 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             Log.d("TAG", "Stopped detecteing beacons")
         }
     }
-
-
 
     private val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
     private var scanning = false
@@ -188,12 +210,70 @@ private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
     // Device scan callback.
     private val leScanCallback: ScanCallback = object : ScanCallback() {
+        @SuppressLint("MissingPermission")
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            Log.d("result", result.device.toString())
-            Log.d("result", result.rssi.toString())
-//            leDeviceListAdapter.addDevice(result.device)
-//            leDeviceListAdapter.notifyDataSetChanged()
+            if(result.device.toString() == "D5:43:8F:F6:0D:46"){
+
+                Log.d("all info", result.toString())
+                Log.d("device", result.device.toString())
+                Log.d("rssi", result.rssi.toString())
+                Log.d("advertisingSid", result.advertisingSid.toString())
+                Log.d("txPower", result.txPower.toString())
+
+                val base = 10
+                val exponent = ((-85 - (result.rssi).toDouble())/100.0)
+                val resultDistance = base.toDouble().pow(exponent.toDouble())
+                Log.d("Distance", resultDistance.toString())
+
+                val uuid = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(2, 18))
+                Log.d("UUID", uuid)
+
+                val major = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(18, 20))
+
+                Log.d("MAJOR", major.toInt(16).toString())
+
+                val minor = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(20, 22))
+                Log.d("MINOR", minor.toInt(16).toString())
+
+            }
+
         }
+    }
+
+    fun toHexString(bytes: ByteArray): String {
+        if (bytes.isEmpty()) {
+            return ""
+        }
+        val hexChars = CharArray(bytes.size * 2)
+        for (j in bytes.indices) {
+            val v = (bytes[j].toInt() and 0xFF)
+            hexChars[j * 2] = HEX[v ushr 4]
+            hexChars[j * 2 + 1] = HEX[v and 0x0F]
+        }
+        return String(hexChars)
+    }
+
+    private val HEX = "0123456789ABCDEF".toCharArray()
+
+
+    fun ByteArrayToString(ba: ByteArray): String {
+        val hex = StringBuilder(ba.size * 2)
+        for (b in ba) hex.append("$b ")
+        return hex.toString()
+    }
+
+    fun getUUID(result: ScanResult): String? {
+        val UUIDx: String = UUID
+            .nameUUIDFromBytes(result.scanRecord!!.bytes).toString()
+//        ToastMakers.message(scannerActivity.getApplicationContext(), UUIDx)
+        Log.e("UUID", " as String ->>$UUIDx")
+        return UUIDx
+    }
+
+
+    companion object {
+        val TAG = "Main"
     }
 }
