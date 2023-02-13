@@ -19,17 +19,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.util.keyIterator
 import androidx.lifecycle.Observer
-import org.altbeacon.beacon.*
-import java.io.UnsupportedEncodingException
+import org.altbeacon.beacon.Beacon
+import org.altbeacon.beacon.MonitorNotifier
+import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 
 
+const val MAC_BEACON_abc: String = "D5:43:8F:F6:0D:46"
+const val MAC_BEACON_01: String = "D5:D2:C0:EC:BA:76"
+const val MAC_BEACON_02: String = "DE:79:8D:06:0C:AC"
 class MainActivity : AppCompatActivity() {
     private lateinit var sensorManager: SensorManager
     private var sensor: Sensor? = null
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     val locationPermissionRequest = registerForActivityResult(
@@ -59,19 +64,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-      /*  sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)*/
-
-//        val beaconManager =  BeaconManager.getInstanceForApplication(this)
-//        val region = Region("all-beacons-region", null, null, null)
-//        // Set up a Live Data observer so this Activity can get monitoring callbacks
-//        // observer will be called each time the monitored regionState changes (inside vs. outside region)
-//        beaconManager.getRegionViewModel(region).regionState.observe(this, monitoringObserver)
-//        beaconManager.startMonitoring(region)
-
-        // Before you perform the actual permission request, check whether your app
-        // already has the permissions, and whether your app needs to show a permission
-        // rationale dialog. For more details, see Request permissions.
         locationPermissionRequest.launch(arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -138,18 +130,18 @@ class MainActivity : AppCompatActivity() {
         }
         scanLeDevice()
 
-        val beaconManager =  BeaconManager.getInstanceForApplication(this)
-        beaconManager.beaconParsers.clear()
+//        val beaconManager =  BeaconManager.getInstanceForApplication(this)
+//        beaconManager.beaconParsers.clear()
 
         // The example shows how to find iBeacon.
-        beaconManager.beaconParsers.add(
-            BeaconParser().
-            setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
-        val region = Region("all-beacons-region", null, null, null)
-        // Set up a Live Data observer so this Activity can get ranging callbacks
-        // observer will be called each time the monitored regionState changes (inside vs. outside region)
-        beaconManager.getRegionViewModel(region).rangedBeacons.observe(this, rangingObserver)
-        beaconManager.startRangingBeacons(region)
+//        beaconManager.beaconParsers.add(
+//            BeaconParser().
+//            setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+//        val region = Region("all-beacons-region", null, null, null)
+//        // Set up a Live Data observer so this Activity can get ranging callbacks
+//        // observer will be called each time the monitored regionState changes (inside vs. outside region)
+//        beaconManager.getRegionViewModel(region).rangedBeacons.observe(this, rangingObserver)
+//        beaconManager.startRangingBeacons(region)
 
     }
 
@@ -208,34 +200,70 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var arrayDistance: ArrayList<Double> = arrayListOf()
     // Device scan callback.
     private val leScanCallback: ScanCallback = object : ScanCallback() {
-        @SuppressLint("MissingPermission")
+        @SuppressLint("MissingPermission", "SimpleDateFormat")
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            if(result.device.toString() == "D5:43:8F:F6:0D:46"){
+            if(result.device.toString() == MAC_BEACON_01){
+                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                val currentDate = sdf.format(Date())
+                Log.d("Date: ", currentDate)
 
                 Log.d("all info", result.toString())
                 Log.d("device", result.device.toString())
                 Log.d("rssi", result.rssi.toString())
                 Log.d("advertisingSid", result.advertisingSid.toString())
                 Log.d("txPower", result.txPower.toString())
+                Log.d("txPowerLevel", result.scanRecord!!.txPowerLevel.toString())
 
                 val base = 10
-                val exponent = ((-85 - (result.rssi).toDouble())/100.0)
-                val resultDistance = base.toDouble().pow(exponent.toDouble())
+                val n = 2.0
+                val exponent = ((-60 - (result.rssi).toDouble())/(10*n))
+                val resultDistance = base.toDouble().pow(exponent)
                 Log.d("Distance", resultDistance.toString())
+                arrayDistance.add(resultDistance)
 
-                val uuid = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(2, 18))
+
+                var avgDistance:Double = 0.0
+                if(arrayDistance.size == 3){
+
+                    for (i in arrayDistance){
+                        avgDistance += i
+                    }
+                    avgDistance /= 3.0
+                    Log.d("AVGDistance: ", avgDistance.toString())
+                    arrayDistance.removeAt(0)
+                }
+
+                result.scanRecord!!.manufacturerSpecificData.keyIterator().forEach { key ->
+//                    Log.d("getManufacturer",  result.scanRecord!!.getManufacturerSpecificData(key)!!.copyOfRange(22, 23).toString())
+                    Log.d("txpower", toHexString(result.scanRecord!!.getManufacturerSpecificData(key)!!.copyOfRange(22, 23)).toInt(16).toString())
+                }
+                val uuid = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(2, 18))
                 Log.d("UUID", uuid)
 
-                val major = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(18, 20))
+                val major = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(18, 20))
 
                 Log.d("MAJOR", major.toInt(16).toString())
 
-                val minor = toHexString(result.scanRecord!!.getManufacturerSpecificData(0X004C)!!.copyOfRange(20, 22))
+                val minor = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(20, 22))
                 Log.d("MINOR", minor.toInt(16).toString())
+
+                val txpower = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(22, 23))
+                Log.d("txpower", txpower.toInt(16).toString())
+
+
+                var writeText = currentDate + "\t" + String.format("%.3f", avgDistance) + "\t" + result.rssi.toString() + "\n"
+                Log.d("writeText", writeText)
+
+                val file = File(applicationContext.filesDir, "pixel3a1.txt")
+                file.createNewFile()
+                file.appendText(writeText)
+//                val readResult = FileInputStream(file).bufferedReader().use { it.readText() }
+//                println("readResult=$readResult")
 
             }
 
@@ -256,22 +284,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val HEX = "0123456789ABCDEF".toCharArray()
-
-
-    fun ByteArrayToString(ba: ByteArray): String {
-        val hex = StringBuilder(ba.size * 2)
-        for (b in ba) hex.append("$b ")
-        return hex.toString()
-    }
-
-    fun getUUID(result: ScanResult): String? {
-        val UUIDx: String = UUID
-            .nameUUIDFromBytes(result.scanRecord!!.bytes).toString()
-//        ToastMakers.message(scannerActivity.getApplicationContext(), UUIDx)
-        Log.e("UUID", " as String ->>$UUIDx")
-        return UUIDx
-    }
-
 
     companion object {
         val TAG = "Main"
