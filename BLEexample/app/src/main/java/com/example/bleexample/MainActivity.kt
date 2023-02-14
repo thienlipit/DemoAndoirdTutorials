@@ -200,7 +200,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    var arrayDistance: ArrayList<Double> = arrayListOf()
+    var arrayDistance: MutableList<Double> = mutableListOf()
+    var mutableListRSSI: MutableList<Int> = mutableListOf()
     // Device scan callback.
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         @SuppressLint("MissingPermission", "SimpleDateFormat")
@@ -208,62 +209,70 @@ class MainActivity : AppCompatActivity() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             if(result.device.toString() == MAC_BEACON_01){
-                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+//                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                val sdf = SimpleDateFormat("hh:mm:ss")
                 val currentDate = sdf.format(Date())
-                Log.d("Date: ", currentDate)
 
-                Log.d("all info", result.toString())
-                Log.d("device", result.device.toString())
+//                Log.d("all info", result.toString())
+//                Log.d("device", result.device.toString())
                 Log.d("rssi", result.rssi.toString())
-                Log.d("advertisingSid", result.advertisingSid.toString())
-                Log.d("txPower", result.txPower.toString())
-                Log.d("txPowerLevel", result.scanRecord!!.txPowerLevel.toString())
+//                Log.d("advertisingSid", result.advertisingSid.toString())
+//                Log.d("txPower", result.txPower.toString())
+//                Log.d("txPowerLevel", result.scanRecord!!.txPowerLevel.toString())
 
                 val base = 10
-                val n = 2.0
-                val exponent = ((-60 - (result.rssi).toDouble())/(10*n))
+                val n = 3   // environment index
+
+                val measurePower = -46.0
+                val txPower = 6
+                val advInterval = 300  //ADV_interval 300ms
+                val realDistance = 2.6    // 1 meter
+
+
+                val exponent = ((measurePower - (result.rssi).toDouble())/(10*n))
                 val resultDistance = base.toDouble().pow(exponent)
                 Log.d("Distance", resultDistance.toString())
                 arrayDistance.add(resultDistance)
+                mutableListRSSI.add(result.rssi)
 
 
                 var avgDistance:Double = 0.0
+                var avgRSSI: Double = 0.0
                 if(arrayDistance.size == 3){
 
                     for (i in arrayDistance){
                         avgDistance += i
                     }
+                    for (i in mutableListRSSI){
+                        avgRSSI +=  i.toDouble()
+                    }
+                    avgRSSI /= 3.0
                     avgDistance /= 3.0
                     Log.d("AVGDistance: ", avgDistance.toString())
-                    arrayDistance.removeAt(0)
+                    arrayDistance.clear()
+                    mutableListRSSI.clear()
+
+                    val writeText = currentDate + "\t" + txPower + "\t" + advInterval + "\t" + measurePower + "\t" + n + "\t" + String.format("%.3f", avgDistance) + "\t" + realDistance + "\t" + String.format("%.3f", avgRSSI) + "\n"
+                    StoreData().writeDataToFile("SS_Data.txt", writeText, applicationContext)
+
                 }
 
                 result.scanRecord!!.manufacturerSpecificData.keyIterator().forEach { key ->
 //                    Log.d("getManufacturer",  result.scanRecord!!.getManufacturerSpecificData(key)!!.copyOfRange(22, 23).toString())
-                    Log.d("txpower", toHexString(result.scanRecord!!.getManufacturerSpecificData(key)!!.copyOfRange(22, 23)).toInt(16).toString())
+//                    Log.d("txpower", toHexString(result.scanRecord!!.getManufacturerSpecificData(key)!!.copyOfRange(22, 23)).toInt(16).toString())
                 }
                 val uuid = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(2, 18))
-                Log.d("UUID", uuid)
+//                Log.d("UUID", uuid)
 
                 val major = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(18, 20))
 
-                Log.d("MAJOR", major.toInt(16).toString())
+//                Log.d("MAJOR", major.toInt(16).toString())
 
                 val minor = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(20, 22))
-                Log.d("MINOR", minor.toInt(16).toString())
+//                Log.d("MINOR", minor.toInt(16).toString())
 
                 val txpower = toHexString(result.scanRecord!!.getManufacturerSpecificData(65535)!!.copyOfRange(22, 23))
-                Log.d("txpower", txpower.toInt(16).toString())
-
-
-                var writeText = currentDate + "\t" + String.format("%.3f", avgDistance) + "\t" + result.rssi.toString() + "\n"
-                Log.d("writeText", writeText)
-
-                val file = File(applicationContext.filesDir, "pixel3a1.txt")
-                file.createNewFile()
-                file.appendText(writeText)
-//                val readResult = FileInputStream(file).bufferedReader().use { it.readText() }
-//                println("readResult=$readResult")
+//                Log.d("txpower", txpower.toInt(16).toString())
 
             }
 
