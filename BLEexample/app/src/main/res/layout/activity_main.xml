@@ -34,7 +34,7 @@
         android:id="@+id/btnLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/BtBtn1"
+        android:layout_below="@id/sensor"
         android:layout_centerInParent="true"
         android:text="Get location" />
 

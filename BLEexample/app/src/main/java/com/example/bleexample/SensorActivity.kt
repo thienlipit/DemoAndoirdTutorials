@@ -18,7 +18,7 @@ class SensorActivity : Activity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.proximity)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        proximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+        proximity = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
