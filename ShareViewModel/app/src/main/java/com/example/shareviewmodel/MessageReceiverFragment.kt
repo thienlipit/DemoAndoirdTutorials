@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 class MessageReceiverFragment : Fragment() {
-    private val viewModel: SharedViewModel by viewModels()
+//    private val viewModel: SharedViewModel by viewModels()
 
     private val viewModel1: SharedViewModel by activityViewModels()
 
@@ -33,7 +33,7 @@ class MessageReceiverFragment : Fragment() {
         // reference for the container declared above
         displayMsg = view.findViewById(R.id.textViewReceiver)
         // create object of SharedViewModel
-        val model = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+//        val model = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         // observing the change in the message declared in SharedViewModel
 //        model.message.observe(viewLifecycleOwner, Observer {
 //            // updating data in displayMsg

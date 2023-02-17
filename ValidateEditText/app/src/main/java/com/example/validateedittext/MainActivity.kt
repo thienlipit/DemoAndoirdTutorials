@@ -1,10 +1,13 @@
 package com.example.validateedittext
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,5 +38,19 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Validation Successful",Toast.LENGTH_LONG).show()
             }
         }
+
+        val til = findViewById<TextInputLayout>(R.id.textLayout)
+        val edtText = findViewById<TextInputEditText>(R.id.edtLayout).text
+        if(edtText!!.isEmpty()){
+            til.error = "You need to enter a name"
+
+        }
+        else {
+
+            til.error = null
+        }
+
+
+
     }
 }

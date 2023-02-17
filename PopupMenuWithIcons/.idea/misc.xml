@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ThienLipitGitHub/DemoAndoirdTutorials/PopupMenuWithIcons/app/src/main/res/drawable/ic_qr_code.xml" value="0.2485" />
+        <entry key="..\:/ThienLipitGitHub/DemoAndoirdTutorials/PopupMenuWithIcons/app/src/main/res/drawable/ic_qr_code1.xml" value="0.2485" />
         <entry key="..\:/ThienLipitGitHub/DemoAndoirdTutorials/PopupMenuWithIcons/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/ThienLipitGitHub/DemoAndoirdTutorials/PopupMenuWithIcons/app/src/main/res/menu/popup_menu.xml" value="0.1" />
       </map>

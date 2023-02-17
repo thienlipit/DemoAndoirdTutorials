@@ -64,4 +64,19 @@
         android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_below="@+id/button"
+        android:id="@+id/textLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 </RelativeLayout>
