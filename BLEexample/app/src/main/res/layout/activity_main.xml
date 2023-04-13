@@ -8,17 +8,17 @@
 
     <!--Changes the state of Bluetooth on button click-->
     <Button
-        android:id="@+id/BtBtn"
+        android:id="@+id/btnBTOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Turn on BT" />
 
     <Button
-        android:id="@+id/BtBtn1"
+        android:id="@+id/btnBTOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_below="@id/BtBtn"
+       android:layout_below="@id/btnBTOn"
         android:layout_centerInParent="true"
         android:text="Turn off BT" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/sensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/BtBtn1"
+        android:layout_below="@id/btnBTOff"
         android:layout_centerInParent="true"
         android:text="Test sensor" />
 
@@ -38,14 +38,31 @@
         android:layout_centerInParent="true"
         android:text="Get location" />
 
-    <!--Displays the state of Bluetooth on button click-->
+<!--    Displays the state of Bluetooth on button click-->
     <TextView
         android:id="@+id/BtTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/BtBtn"
+        android:layout_above="@id/btnBTOn"
         android:layout_centerHorizontal="true"
         android:hint="Bluetooth Status"
+        android:textSize="30sp" />
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnScan"
+        android:layout_centerHorizontal="true"
+        android:text="Stop"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/BtTv"
+        android:layout_centerHorizontal="true"
+        android:text="Scan"
         android:textSize="30sp" />
 
 </RelativeLayout>
