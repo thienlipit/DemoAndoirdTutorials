@@ -19,8 +19,11 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.util.keyIterator
 import com.example.bleexample.databinding.ActivityMainBinding
+import com.feasycom.bean.BluetoothDeviceWrapper
+import com.feasycom.controler.FscBeaconApi
+import com.feasycom.controler.FscBeaconApiImp
+import com.feasycom.controler.FscBeaconCallbacksImp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +42,28 @@ open class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val FscBeaconApi: FscBeaconApi = FscBeaconApiImp.getInstance(applicationContext)
+        FscBeaconApi.initialize()
+
+        FscBeaconApi.setCallbacks(object : FscBeaconCallbacksImp() {
+            override fun blePeripheralFound(device: BluetoothDeviceWrapper, rssi: Int, record: ByteArray) {
+              if (device.address.equals(FEASY_BEACON)){
+                  Log.d("info", "${device.address} ${device.name} ${device.rssi} ${device.altBeacon} ${device.feasyBeacon} ${device.timestampNanos}")
+                  Log.d("API", "$rssi + $record")
+//                  val string = String(record)
+
+                  val string = String(record, Charsets.UTF_8)
+                  Log.d("record", "$string")
+              }
+
+            }
+        })
+
+        FscBeaconApi.startScan()
+
+//        FscBeaconApi mFscBeaconApi = FscBeaconApiImp.getInstance(context);
+//        mFscBeaconApi.initialize()
 
         RequestPermission(this).requestAllPermission()
         btnLocationClick(binding.btnLocation)
@@ -138,14 +163,18 @@ open class MainActivity : AppCompatActivity() {
                 }*/
 
 
-                var manufacturerId = 0
-                result.scanRecord!!.manufacturerSpecificData.keyIterator().forEach { key ->
-                    manufacturerId = key
-                }
-                showBeaconInfo(result,manufacturerId )
+//                var manufacturerId = 0
+//                result.scanRecord!!.manufacturerSpecificData.keyIterator().forEach { key ->
+//                    manufacturerId = key
+//                }
+//                showBeaconInfo(result,manufacturerId )
 
             }
         }
+    }
+
+    fun startScan(time: Int): Boolean{
+        return true
     }
 
     fun showBeaconInfo(result: ScanResult, manufacturerId: Int) {

@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
         android:allowBackup="true"
@@ -40,6 +41,18 @@
             android:foregroundServiceType="location">
 
         </service>
+
+        <service
+            android:name="com.feasycom.service.AtCommandService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+
+            android:name="com.feasycom.service.OTABLEService"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>
